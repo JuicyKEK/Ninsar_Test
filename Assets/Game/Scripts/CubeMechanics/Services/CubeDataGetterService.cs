@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using Game.Scripts.CubeMechanics.Data;
 using Game.Scripts.CubeMechanics.Services.Interfaces;
+using UnityEngine;
 
 namespace Game.Scripts.CubeMechanics.Services
 {
@@ -24,7 +25,8 @@ namespace Game.Scripts.CubeMechanics.Services
             
             if (string.IsNullOrWhiteSpace(fileText))
             {
-                throw new InvalidOperationException($"The file at the path {AddressablesDataPath} is empty or has not been loaded.");
+                Debug.LogError($"The file at the path {AddressablesDataPath} is empty or has not been loaded.");
+                return null;
             }
             
             return _cubeColorDataParser.ParseTextToMatrix(fileText);

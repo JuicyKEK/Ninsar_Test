@@ -30,7 +30,7 @@ namespace Game.Scripts.CubeMechanics.Data
                 
                 if (row.Length != expectedWidth)
                 {
-                    throw new FormatException(
+                    Debug.LogError(
                         $"Строка {i} имеет длину {row.Length}, ожидалось {expectedWidth}. Матрица должна быть прямоугольной.");
                 }
 

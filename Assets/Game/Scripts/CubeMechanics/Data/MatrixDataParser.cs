@@ -1,0 +1,66 @@
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Game.Scripts.CubeMechanics.Data
+{
+    public class MatrixDataParser : IMatrixDataParser
+    {
+        public int[][] ParseTextToMatrix(string fileText)
+        {
+            return ParseMatrix(fileText);
+        }
+
+        private int[][] ParseMatrix(string fileText)
+        {
+            string[] lines = fileText.Split(
+                new[] { "\r\n", "\n" },
+                StringSplitOptions.RemoveEmptyEntries);
+            
+            if (lines.Length == 0)
+            {
+                throw new FormatException("Файл не содержит строк с данными.");
+            }
+            
+            var rows = new List<int[]>(lines.Length);
+
+            int expectedWidth = lines[0].Length;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i].Trim();
+                int[] row = ParseLine(line, i);
+                
+                if (row.Length != expectedWidth)
+                {
+                    throw new FormatException(
+                        $"Строка {i} имеет длину {row.Length}, ожидалось {expectedWidth}. Матрица должна быть прямоугольной.");
+                }
+
+                rows.Add(row);
+            }
+
+            return rows.ToArray();
+        }
+
+        private int[] ParseLine(string line, int lineIndex)
+        {
+            var row = new int[line.Length];
+
+            for (int i = 0; i < line.Length; i++)
+            {
+                char ch = line[i];
+
+                if (!char.IsDigit(ch))
+                {
+                    throw new FormatException(
+                        $"Недопустимый символ '{ch}' в строке {lineIndex}, позиция {i}. Ожидалась цифра.");
+                }
+
+                row[i] = ch - '0';
+            }
+
+            return row;
+        }
+    }
+}

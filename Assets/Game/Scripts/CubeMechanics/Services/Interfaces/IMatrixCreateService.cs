@@ -1,6 +1,6 @@
-﻿using Game.Scripts.CubeMechanics.Controllers.Data;
+﻿using Game.Scripts.CubeMechanics.Data;
 
-namespace Game.Scripts.CubeMechanics.Controllers.Data
+namespace Game.Scripts.CubeMechanics.Services
 {
     public interface IMatrixCreateService
     {

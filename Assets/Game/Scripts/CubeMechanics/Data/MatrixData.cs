@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.Scripts.CubeMechanics.Controllers.Data
+namespace Game.Scripts.CubeMechanics.Data
 {
     public class MatrixData
     {
@@ -9,10 +9,10 @@ namespace Game.Scripts.CubeMechanics.Controllers.Data
         public int Width => _width;
         public Vector2Int StartPosition;
 
-        private int[][] _matrix;
-        private int _height;
-        private int _width;
-        
+        private readonly int[][] _matrix;
+        private readonly int _height;
+        private readonly int _width;
+
         public MatrixData(int[][] matrix, int height, int width, Vector2Int startPosition)
         {
             _height = height;

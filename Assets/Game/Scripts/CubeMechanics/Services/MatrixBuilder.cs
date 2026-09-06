@@ -1,6 +1,6 @@
-﻿using Game.Scripts.CubeMechanics.Controllers.Data;
+﻿using Game.Scripts.CubeMechanics.Data;
 
-namespace Game.Scripts.CubeMechanics.Controllers.Data
+namespace Game.Scripts.CubeMechanics.Services
 {
     public class MatrixBuilder : IMatrixBuilder
     {
@@ -27,16 +27,14 @@ namespace Game.Scripts.CubeMechanics.Controllers.Data
         
         public void Fill(int[][] matrix, int centerRow, int centerCol)
         {
-            int matrixHeight = matrix.Length;
-            int matrixWidth = matrix[0].Length;
             int sourceHeight = _cubeColorData.Matrix.Length;
             int sourceWidth = _cubeColorData.Matrix[0].Length;
 
-            for (int i = 0; i < matrixHeight; i++)
+            for (int i = 0; i < matrix.Length; i++)
             {
                 int sourceRow = ((centerRow + i) % sourceHeight + sourceHeight) % sourceHeight;
 
-                for (int j = 0; j < matrixWidth; j++)
+                for (int j = 0; j < matrix[i].Length; j++)
                 {
                     int sourceCol = ((centerCol + j) % sourceWidth + sourceWidth) % sourceWidth;
                     matrix[i][j] = _cubeColorData.Matrix[sourceRow][sourceCol];

@@ -1,4 +1,4 @@
-﻿namespace Game.Scripts.CubeMechanics.Controllers.Data
+﻿namespace Game.Scripts.CubeMechanics.Services
 {
     public interface IMatrixBuilder
     {

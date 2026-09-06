@@ -1,7 +1,8 @@
 using Game.Scripts.CubeMechanics.Controllers;
-using Game.Scripts.CubeMechanics.Controllers.Controllers;
-using Game.Scripts.CubeMechanics.Controllers.Data;
 using Game.Scripts.CubeMechanics.Controllers.View;
+using Game.Scripts.CubeMechanics.Data;
+using Game.Scripts.CubeMechanics.Services;
+using Game.Scripts.CubeMechanics.View;
 using Game.Scripts.InputController;
 using UnityEngine;
 using VContainer;
@@ -23,8 +24,7 @@ namespace Game.Scripts.DI
             
             builder.RegisterComponent(_gameCubeController)
                 .As<IGameCubeController>();
-            builder.RegisterComponent(_сubeViewController)
-                .As<ICubeViewController>();
+            builder.RegisterComponent(_сubeViewController);
             builder.RegisterComponent(_inputController)
                 .As<ICubeInputController>();
         }

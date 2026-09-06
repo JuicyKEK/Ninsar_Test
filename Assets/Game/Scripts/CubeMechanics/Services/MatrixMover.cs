@@ -1,14 +1,14 @@
 ﻿
 using System.Collections.Generic;
-using Game.Scripts.CubeMechanics.Controllers.Data;
+using Game.Scripts.CubeMechanics.Data;
 using UnityEngine;
 
-namespace Game.Scripts.CubeMechanics.Controllers.Data
+namespace Game.Scripts.CubeMechanics.Services
 {
     public class MatrixMover : IMatrixMover
     {
         private readonly IMatrixBuilder _matrixBuilder;
-        private readonly Dictionary<KeyCode, Vector2Int> MoveOffsets = new()
+        private readonly Dictionary<KeyCode, Vector2Int> _moveOffsets = new()
         {
             { KeyCode.W, new Vector2Int(-1, 0) },
             { KeyCode.S, new Vector2Int(1, 0) },
@@ -21,7 +21,7 @@ namespace Game.Scripts.CubeMechanics.Controllers.Data
             _matrixBuilder = matrixBuilder;
         }
 
-        public void MatrixMove(KeyCode key, MatrixData matrix) 
+        public void MatrixMove(KeyCode key, MatrixData matrix)
         {
             var offset = SelectMoveOffset(key);
             matrix.StartPosition += offset;
@@ -31,7 +31,7 @@ namespace Game.Scripts.CubeMechanics.Controllers.Data
 
         private Vector2Int SelectMoveOffset(KeyCode key)
         {
-            return MoveOffsets.GetValueOrDefault(key, Vector2Int.zero);
+            return _moveOffsets.GetValueOrDefault(key, Vector2Int.zero);
         }
     }
 }

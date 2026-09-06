@@ -1,4 +1,5 @@
-﻿using Game.Scripts.CubeMechanics.Controllers.Data;
+﻿using Game.Scripts.CubeMechanics.Data;
+using Game.Scripts.CubeMechanics.View;
 using R3;
 using UnityEngine;
 using VContainer;

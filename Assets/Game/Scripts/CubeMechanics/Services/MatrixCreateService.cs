@@ -1,14 +1,15 @@
-﻿using Game.Scripts.CubeMechanics.Controllers.Data;
+﻿using System;
+using Game.Scripts.CubeMechanics.Data;
 using UnityEngine;
 
-namespace Game.Scripts.CubeMechanics.Controllers.Data
+namespace Game.Scripts.CubeMechanics.Services
 {
     public class MatrixCreateService : IMatrixCreateService
     {
-        private readonly CubeColorData _cubeColorData;
+        private readonly ICubeColorData _cubeColorData;
         private readonly IMatrixBuilder _matrixBuilder;
-        
-        public MatrixCreateService(CubeColorData cubeColorData, IMatrixBuilder matrixBuilder)
+
+        public MatrixCreateService(ICubeColorData cubeColorData, IMatrixBuilder matrixBuilder)
         {
             _cubeColorData = cubeColorData;
             _matrixBuilder = matrixBuilder;
@@ -18,13 +19,12 @@ namespace Game.Scripts.CubeMechanics.Controllers.Data
         {
             if (height > _cubeColorData.Height || width > _cubeColorData.Width)
             {
-                Debug.LogError(
+                throw new ArgumentOutOfRangeException(
                     $"Запрошенный участок {width}x{height} больше исходной матрицы {_cubeColorData.Width}x{_cubeColorData.Height}.");
-                return null;
             }
-
-            Vector2Int startPos = new Vector2Int(Random.Range(0, _cubeColorData.Height), 
-                Random.Range(0, _cubeColorData.Width));
+            
+            Vector2Int startPos = new Vector2Int(UnityEngine.Random.Range(0, _cubeColorData.Height),
+                UnityEngine.Random.Range(0, _cubeColorData.Width));
 
             return new MatrixData(_matrixBuilder.BuildMatrix(startPos.x, startPos.y, height, width),
                 height, width, startPos);

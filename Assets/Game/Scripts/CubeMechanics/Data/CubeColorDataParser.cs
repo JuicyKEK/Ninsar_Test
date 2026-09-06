@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Scripts.CubeMechanics.Controllers.Data
+namespace Game.Scripts.CubeMechanics.Data
 {
     public class CubeColorDataParser : ICubeColorDataParser
     {
@@ -19,8 +19,13 @@ namespace Game.Scripts.CubeMechanics.Controllers.Data
                 new[] { "\r\n", "\n" },
                 StringSplitOptions.RemoveEmptyEntries);
             
-            var rows = new List<int[]>(lines.Length);
+            if (lines.Length == 0)
+            {
+                throw new FormatException("Файл не содержит строк с данными.");
+            }
             
+            var rows = new List<int[]>(lines.Length);
+
             int expectedWidth = lines[0].Length;
 
             for (int i = 0; i < lines.Length; i++)
@@ -30,9 +35,8 @@ namespace Game.Scripts.CubeMechanics.Controllers.Data
                 
                 if (row.Length != expectedWidth)
                 {
-                    Debug.LogError(
+                    throw new FormatException(
                         $"Строка {i} имеет длину {row.Length}, ожидалось {expectedWidth}. Матрица должна быть прямоугольной.");
-                    return null;
                 }
 
                 rows.Add(row);

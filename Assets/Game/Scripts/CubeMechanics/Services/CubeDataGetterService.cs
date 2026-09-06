@@ -1,9 +1,8 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using Game.Scripts.CubeMechanics.Controllers.Data;
-using UnityEngine;
+using Game.Scripts.CubeMechanics.Data;
 
-namespace Game.Scripts.CubeMechanics.Controllers.Data
+namespace Game.Scripts.CubeMechanics.Services
 {
     public class CubeDataGetterService : ICubeDataGetterService
     {
@@ -12,9 +11,9 @@ namespace Game.Scripts.CubeMechanics.Controllers.Data
         private readonly ICubeColorDataParser _cubeColorDataParser;
         private readonly IDataLoader _dataLoader;
 
-        public CubeDataGetterService(IDataLoader dataLoader)
+        public CubeDataGetterService(IDataLoader dataLoader, ICubeColorDataParser cubeColorDataParser)
         {
-            _cubeColorDataParser = new CubeColorDataParser();
+            _cubeColorDataParser = cubeColorDataParser;
             _dataLoader = dataLoader;
         }
         
@@ -24,8 +23,8 @@ namespace Game.Scripts.CubeMechanics.Controllers.Data
             
             if (string.IsNullOrWhiteSpace(fileText))
             {
-                Debug.LogError($"The file at the path {AddressablesDataPath} is empty or has not been loaded.");
-                return null;
+                throw new ArgumentNullException(
+                    $"Файл по пути {AddressablesDataPath} пуст или не был загружен.");
             }
             
             return _cubeColorDataParser.ParseTextToMatrix(fileText);

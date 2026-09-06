@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.Scripts.CubeMechanics.Controllers.View
+namespace Game.Scripts.CubeMechanics.View
 {
     public class CubeListView : MonoBehaviour
     {

@@ -1,7 +1,8 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Game.Scripts.CubeMechanics.Data;
 using Game.Scripts.CubeMechanics.Services;
-using Game.Scripts.CubeMechanics.Services.Interfaces;
+using Game.Scripts.InputController;
 using R3;
 using UnityEngine;
 using VContainer;
@@ -11,51 +12,87 @@ namespace Game.Scripts.CubeMechanics.Controllers
 {
     public class GameCubeController : MonoBehaviour, IStartable, IGameCubeController
     {
-        private const int MatrixSize = 3;
-        
-        private readonly ReactiveProperty<int[][]> _colorMatrix = new();
-        public ReadOnlyReactiveProperty<int[][]> ColorMatrix => _colorMatrix;
-        
-        private ICubeDataGetterService _cubeDataGetter;
-        private IMatrixCreateService _matrixCreateService;
+        private readonly ReplaySubject<MatrixData> _colorMatrix = new(1);
+        private readonly CompositeDisposable _disposables = new();
+        public Observable<MatrixData> ColorMatrix => _colorMatrix;
+
+        private IMatrixCreateService _matrixCreater;
         private IMatrixBuilder _matrixBuilder;
-        private IDataLoader _dataLoader;
-        
-        private CubeColorData _cubeData;
-        
+        private IMatrixMover _matrixMover;
+
+        private IGameCubeSettingsData _gameCubeSettingsData;
+        private ICubeInputController _cubeInputController;
+        private ICubeDataGetterService _cubeDataGetter;
+
+        private ICubeColorData _cubeData;
+        private MatrixData _currentMatrix;
+
         [Inject]
-        public void Construct(IDataLoader dataLoader)
+        public void Construct(ICubeInputController cubeInputController,
+            ICubeDataGetterService cubeDataGetter,
+            IGameCubeSettingsData cubeSettingsData)
         {
-            _dataLoader = dataLoader;
+            _cubeInputController = cubeInputController;
+            _cubeDataGetter = cubeDataGetter;
+            _gameCubeSettingsData = cubeSettingsData;
         }
-        
+
         public void Start()
         {
             Init();
         }
 
-        private async void Init()
+        private async UniTaskVoid Init()
         {
-            await InitData();
+            await LoadingData();
             InitServices();
             InitColorMatrix();
         }
 
-        private void InitServices()
+        private async UniTask LoadingData()
         {
-            _matrixBuilder = new MatrixBuilder(_cubeData); 
-            _matrixCreateService = new MatrixCreateService(_cubeData, _matrixBuilder);
+            var matrix = await _cubeDataGetter.LoadRawDataAsync(_gameCubeSettingsData.AddressablesCoubeColorDataPath);
+            _cubeData = new CubeColorData(matrix[0].Length, matrix.Length, matrix);
         }
 
-        private async UniTask InitData()
+        private void InitServices()
         {
-            _cubeDataGetter = new CubeDataGetterService(_dataLoader);
-            _cubeData = await _cubeDataGetter.LoadRawDataAsync();
+            if (_cubeData == null)
+            {
+                throw new ArgumentNullException($"Данные цветов не удалось загрузить");
+            }
+            
+            _matrixBuilder = new MatrixBuilder(_cubeData);
+            _matrixCreater = new MatrixCreateService(_cubeData, _matrixBuilder);
+            _matrixMover = new MatrixMover(_matrixBuilder);
+
+            _cubeInputController.KeyPressed
+                .Subscribe(Move)
+                .AddTo(_disposables);
         }
 
         private void InitColorMatrix()
         {
-            _colorMatrix.Value = _matrixCreateService.GetMatrixFromRandom(MatrixSize, MatrixSize);
+            _currentMatrix = _matrixCreater.CreateMatrixFromRandom(_gameCubeSettingsData.MatrixSize,
+                _gameCubeSettingsData.MatrixSize);
+            _colorMatrix.OnNext(_currentMatrix);
+        }
+
+        private void Move(KeyCode keyCode)
+        {
+            if (_currentMatrix == null)
+            {
+                return;
+            }
+
+            _matrixMover.MatrixMove(keyCode, _currentMatrix);
+            _colorMatrix.OnNext(_currentMatrix);
+        }
+
+        private void OnDestroy()
+        {
+            _colorMatrix.Dispose();
+            _disposables.Dispose();
         }
     }
 }

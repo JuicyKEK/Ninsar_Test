@@ -4,13 +4,11 @@ using UnityEngine;
 
 namespace Game.Scripts.CubeMechanics.Data
 {
-    public class CubeColorDataParser : ICubeColorDataParser
+    public class MatrixDataParser : IMatrixDataParser
     {
-        public CubeColorData ParseTextToMatrix(string fileText)
+        public int[][] ParseTextToMatrix(string fileText)
         {
-            int[][] matrix = ParseMatrix(fileText);
-            
-            return new CubeColorData(matrix[0].Length, matrix.Length, matrix);
+            return ParseMatrix(fileText);
         }
 
         private int[][] ParseMatrix(string fileText)
@@ -19,8 +17,13 @@ namespace Game.Scripts.CubeMechanics.Data
                 new[] { "\r\n", "\n" },
                 StringSplitOptions.RemoveEmptyEntries);
             
-            var rows = new List<int[]>(lines.Length);
+            if (lines.Length == 0)
+            {
+                throw new FormatException("Файл не содержит строк с данными.");
+            }
             
+            var rows = new List<int[]>(lines.Length);
+
             int expectedWidth = lines[0].Length;
 
             for (int i = 0; i < lines.Length; i++)
@@ -30,7 +33,7 @@ namespace Game.Scripts.CubeMechanics.Data
                 
                 if (row.Length != expectedWidth)
                 {
-                    Debug.LogError(
+                    throw new FormatException(
                         $"Строка {i} имеет длину {row.Length}, ожидалось {expectedWidth}. Матрица должна быть прямоугольной.");
                 }
 

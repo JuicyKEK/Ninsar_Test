@@ -1,8 +1,9 @@
-using Game.Scripts.CubeMechanics;
 using Game.Scripts.CubeMechanics.Controllers;
+using Game.Scripts.CubeMechanics.Controllers.View;
+using Game.Scripts.CubeMechanics.Data;
 using Game.Scripts.CubeMechanics.Services;
-using Game.Scripts.CubeMechanics.Services.Interfaces;
 using Game.Scripts.CubeMechanics.View;
+using Game.Scripts.InputController;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -13,17 +14,22 @@ namespace Game.Scripts.DI
     {
         [SerializeField] private GameCubeController _gameCubeController;
         [SerializeField] private CubeViewController _сubeViewController;
+        [SerializeField] private CustomInputController _inputController;
         
         protected override void Configure(IContainerBuilder builder)
         {
             base.Configure(builder);
 
+            builder.Register<ICubeDataGetterService, CubeDataGetterService>(Lifetime.Singleton);
+            builder.Register<IGameCubeSettingsData, GameCubeSettingsData>(Lifetime.Singleton);
+            builder.Register<IMatrixDataParser, MatrixDataParser>(Lifetime.Singleton);
             builder.Register<IDataLoader, DataLoader>(Lifetime.Singleton);
             
             builder.RegisterComponent(_gameCubeController)
                 .As<IGameCubeController>();
-            builder.RegisterComponent(_сubeViewController)
-                .As<ICubeViewController>();
+            builder.RegisterComponent(_сubeViewController);
+            builder.RegisterComponent(_inputController)
+                .As<ICubeInputController>();
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using Cysharp.Threading.Tasks;
-using Game.Scripts.CubeMechanics.Services.Interfaces;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace Game.Scripts.CubeMechanics.Services
+namespace Game.Scripts.CubeMechanics.Data
 {
     public class DataLoader : IDataLoader
     {
@@ -15,13 +15,13 @@ namespace Game.Scripts.CubeMechanics.Services
 
             if (handle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"Failed to load {filePath}: {handle.OperationException}");
-                return null;
+                throw new InvalidOperationException( 
+                    $"Не удалось загрузить '{filePath}': {handle.OperationException}");
             }
 
             string rawText = handle.Result.text;
 
-            Addressables.Release(handle); 
+            Addressables.Release(handle);
 
             return rawText;
         }

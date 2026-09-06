@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 
-namespace Game.Scripts.CubeMechanics.Services.Interfaces
+namespace Game.Scripts.CubeMechanics.Data
 {
     public interface IDataLoader
     {

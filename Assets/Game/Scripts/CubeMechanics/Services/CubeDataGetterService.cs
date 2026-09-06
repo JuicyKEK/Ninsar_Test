@@ -1,34 +1,30 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 using Game.Scripts.CubeMechanics.Data;
-using Game.Scripts.CubeMechanics.Services.Interfaces;
-using UnityEngine;
 
 namespace Game.Scripts.CubeMechanics.Services
 {
     public class CubeDataGetterService : ICubeDataGetterService
     {
-        private const string AddressablesDataPath = "CubeСolors";
-        
-        private readonly ICubeColorDataParser _cubeColorDataParser;
+        private readonly IMatrixDataParser _cubeColorDataParser;
         private readonly IDataLoader _dataLoader;
 
-        public CubeDataGetterService(IDataLoader dataLoader)
+        public CubeDataGetterService(IDataLoader dataLoader, IMatrixDataParser cubeColorDataParser)
         {
-            _cubeColorDataParser = new CubeColorDataParser();
+            _cubeColorDataParser = cubeColorDataParser;
             _dataLoader = dataLoader;
         }
         
-        public async UniTask<CubeColorData> LoadRawDataAsync()
+        public async UniTask<int[][]> LoadRawDataAsync(string dataPath)
         {
-            string fileText = await _dataLoader.LoadRawDataAsync(AddressablesDataPath);
+            string fileText = await _dataLoader.LoadRawDataAsync(dataPath);
             
             if (string.IsNullOrWhiteSpace(fileText))
             {
-                Debug.LogError($"The file at the path {AddressablesDataPath} is empty or has not been loaded.");
-                return null;
+                throw new ArgumentNullException(
+                    $"Файл по пути {dataPath} пуст или не был загружен.");
             }
-            
+
             return _cubeColorDataParser.ParseTextToMatrix(fileText);
         }
     }

@@ -5,6 +5,6 @@ namespace Game.Scripts.CubeMechanics.Services
 {
     public interface ICubeDataGetterService
     {
-        public UniTask<CubeColorData> LoadRawDataAsync();
+        public UniTask<int[][]> LoadRawDataAsync(string dataPath);
     }
 }

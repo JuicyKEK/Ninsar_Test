@@ -1,8 +1,7 @@
-﻿using System;
-using Game.Scripts.CubeMechanics.Data;
+﻿using Game.Scripts.CubeMechanics.Controllers.Data;
 using UnityEngine;
 
-namespace Game.Scripts.CubeMechanics.Services
+namespace Game.Scripts.CubeMechanics.Controllers.Data
 {
     public class MatrixCreateService : IMatrixCreateService
     {
@@ -15,7 +14,7 @@ namespace Game.Scripts.CubeMechanics.Services
             _matrixBuilder = matrixBuilder;
         }
 
-        public int[][] GetMatrixFromRandom(int height, int width)
+        public MatrixData CreateMatrixFromRandom(int height, int width)
         {
             if (height > _cubeColorData.Height || width > _cubeColorData.Width)
             {
@@ -24,10 +23,11 @@ namespace Game.Scripts.CubeMechanics.Services
                 return null;
             }
 
-            int centerRow = UnityEngine.Random.Range(0, _cubeColorData.Height);
-            int centerCol = UnityEngine.Random.Range(0, _cubeColorData.Width);
+            Vector2Int startPos = new Vector2Int(Random.Range(0, _cubeColorData.Height), 
+                Random.Range(0, _cubeColorData.Width));
 
-            return _matrixBuilder.BuildMatrix(centerRow, centerCol, height, width);
+            return new MatrixData(_matrixBuilder.BuildMatrix(startPos.x, startPos.y, height, width),
+                height, width, startPos);
         }
     }
 }

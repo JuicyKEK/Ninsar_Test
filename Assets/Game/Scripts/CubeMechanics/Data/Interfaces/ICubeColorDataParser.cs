@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 
-namespace Game.Scripts.CubeMechanics.Data
+namespace Game.Scripts.CubeMechanics.Controllers.Data
 {
     public interface ICubeColorDataParser
     {

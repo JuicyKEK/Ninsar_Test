@@ -1,10 +1,10 @@
 ﻿using Cysharp.Threading.Tasks;
-using Game.Scripts.CubeMechanics.Services.Interfaces;
+using Game.Scripts.CubeMechanics.Controllers.Data;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace Game.Scripts.CubeMechanics.Services
+namespace Game.Scripts.CubeMechanics.Controllers.Data
 {
     public class DataLoader : IDataLoader
     {

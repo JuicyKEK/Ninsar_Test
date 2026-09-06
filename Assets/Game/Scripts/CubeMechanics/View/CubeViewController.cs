@@ -1,9 +1,9 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Game.Scripts.CubeMechanics.Controllers.Data;
 using R3;
 using UnityEngine;
 using VContainer;
 
-namespace Game.Scripts.CubeMechanics.View
+namespace Game.Scripts.CubeMechanics.Controllers.View
 {
     public class CubeViewController : MonoBehaviour, ICubeViewController
     {
@@ -26,20 +26,20 @@ namespace Game.Scripts.CubeMechanics.View
                 .AddTo(_disposables);
         }
         
-        private void OnColorMatrixChanged(int[][] matrix)
+        private void OnColorMatrixChanged(MatrixData matrix)
         {
-            if (matrix == null)
+            if (matrix == null) 
             {
                 return;
             }
             
-            if (matrix.Length == 0 || matrix[0].Length == 0)
+            if (matrix.Matrix.Length == 0 || matrix.Matrix[0].Length == 0)
             {
-                Debug.LogError($"Размерность матрицы по высоте - {matrix.Length}, по ширине - {matrix[0].Length}");
+                Debug.LogError($"Размерность матрицы по высоте - {matrix.Matrix.Length}, по ширине - {matrix.Matrix[0].Length}");
                 return;
             }
             
-            Color[] colors = CreateColorArray(matrix);
+            Color[] colors = CreateColorArray(matrix.Matrix);
             _cubeListView.SetColor(colors);
         }
 

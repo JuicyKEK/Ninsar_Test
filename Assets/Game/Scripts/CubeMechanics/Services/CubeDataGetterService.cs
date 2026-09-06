@@ -1,10 +1,9 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using Game.Scripts.CubeMechanics.Data;
-using Game.Scripts.CubeMechanics.Services.Interfaces;
+using Game.Scripts.CubeMechanics.Controllers.Data;
 using UnityEngine;
 
-namespace Game.Scripts.CubeMechanics.Services
+namespace Game.Scripts.CubeMechanics.Controllers.Data
 {
     public class CubeDataGetterService : ICubeDataGetterService
     {

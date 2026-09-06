@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Scripts.CubeMechanics.Data
+namespace Game.Scripts.CubeMechanics.Controllers.Data
 {
     public class CubeColorDataParser : ICubeColorDataParser
     {
@@ -32,6 +32,7 @@ namespace Game.Scripts.CubeMechanics.Data
                 {
                     Debug.LogError(
                         $"Строка {i} имеет длину {row.Length}, ожидалось {expectedWidth}. Матрица должна быть прямоугольной.");
+                    return null;
                 }
 
                 rows.Add(row);

@@ -1,10 +1,10 @@
-﻿using Game.Scripts.CubeMechanics.Data;
+﻿using Game.Scripts.CubeMechanics.Controllers.Data;
 using R3;
 
-namespace Game.Scripts.CubeMechanics
+namespace Game.Scripts.CubeMechanics.Controllers
 {
     public interface IGameCubeController
     {
-        public ReadOnlyReactiveProperty<int[][]> ColorMatrix { get; }
+        public ReadOnlyReactiveProperty<MatrixData> ColorMatrix { get; }
     }
 }

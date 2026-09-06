@@ -1,7 +1,9 @@
-﻿namespace Game.Scripts.CubeMechanics.Services
+﻿using Game.Scripts.CubeMechanics.Controllers.Data;
+
+namespace Game.Scripts.CubeMechanics.Controllers.Data
 {
     public interface IMatrixCreateService
     {
-        public int[][] GetMatrixFromRandom(int height, int width);
+        public MatrixData CreateMatrixFromRandom(int height, int width);
     }
 }

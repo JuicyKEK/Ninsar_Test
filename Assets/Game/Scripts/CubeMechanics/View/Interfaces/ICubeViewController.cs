@@ -1,4 +1,4 @@
-﻿namespace Game.Scripts.CubeMechanics.View
+﻿namespace Game.Scripts.CubeMechanics.Controllers.View
 {
     public interface ICubeViewController
     {

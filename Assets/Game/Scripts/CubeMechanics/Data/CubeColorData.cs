@@ -1,6 +1,6 @@
-﻿namespace Game.Scripts.CubeMechanics.Data
+﻿namespace Game.Scripts.CubeMechanics.Controllers.Data
 {
-    public class CubeColorData
+    public class CubeColorData : ICubeColorData
     {
         public int[][] Matrix => _matrix;
         public int Width => _width;

@@ -4,13 +4,11 @@ using UnityEngine;
 
 namespace Game.Scripts.CubeMechanics.Data
 {
-    public class CubeColorDataParser : ICubeColorDataParser
+    public class MatrixDataParser : IMatrixDataParser
     {
-        public CubeColorData ParseTextToMatrix(string fileText)
+        public int[][] ParseTextToMatrix(string fileText)
         {
-            int[][] matrix = ParseMatrix(fileText);
-            
-            return new CubeColorData(matrix[0].Length, matrix.Length, matrix);
+            return ParseMatrix(fileText);
         }
 
         private int[][] ParseMatrix(string fileText)

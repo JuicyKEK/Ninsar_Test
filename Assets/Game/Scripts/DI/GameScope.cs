@@ -20,6 +20,9 @@ namespace Game.Scripts.DI
         {
             base.Configure(builder);
 
+            builder.Register<ICubeDataGetterService, CubeDataGetterService>(Lifetime.Singleton);
+            builder.Register<IGameCubeSettingsData, GameCubeSettingsData>(Lifetime.Singleton);
+            builder.Register<IMatrixDataParser, MatrixDataParser>(Lifetime.Singleton);
             builder.Register<IDataLoader, DataLoader>(Lifetime.Singleton);
             
             builder.RegisterComponent(_gameCubeController)

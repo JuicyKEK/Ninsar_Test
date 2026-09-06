@@ -12,29 +12,29 @@ namespace Game.Scripts.CubeMechanics.Controllers
 {
     public class GameCubeController : MonoBehaviour, IStartable, IGameCubeController
     {
-        private const int MatrixSize = 3;
-
         private readonly ReplaySubject<MatrixData> _colorMatrix = new(1);
         private readonly CompositeDisposable _disposables = new();
         public Observable<MatrixData> ColorMatrix => _colorMatrix;
 
-        private ICubeColorDataParser _cubeColorDataParser;
-        private ICubeDataGetterService _cubeDataGetter;
         private IMatrixCreateService _matrixCreater;
         private IMatrixBuilder _matrixBuilder;
         private IMatrixMover _matrixMover;
 
+        private IGameCubeSettingsData _gameCubeSettingsData;
         private ICubeInputController _cubeInputController;
-        private IDataLoader _dataLoader;
+        private ICubeDataGetterService _cubeDataGetter;
 
         private ICubeColorData _cubeData;
         private MatrixData _currentMatrix;
 
         [Inject]
-        public void Construct(ICubeInputController cubeInputController, IDataLoader dataLoader)
+        public void Construct(ICubeInputController cubeInputController,
+            ICubeDataGetterService cubeDataGetter,
+            IGameCubeSettingsData cubeSettingsData)
         {
             _cubeInputController = cubeInputController;
-            _dataLoader = dataLoader;
+            _cubeDataGetter = cubeDataGetter;
+            _gameCubeSettingsData = cubeSettingsData;
         }
 
         public void Start()
@@ -51,9 +51,8 @@ namespace Game.Scripts.CubeMechanics.Controllers
 
         private async UniTask LoadingData()
         {
-            _cubeColorDataParser = new CubeColorDataParser();
-            _cubeDataGetter = new CubeDataGetterService(_dataLoader, _cubeColorDataParser);
-            _cubeData = await _cubeDataGetter.LoadRawDataAsync();
+            var matrix = await _cubeDataGetter.LoadRawDataAsync(_gameCubeSettingsData.AddressablesCoubeColorDataPath);
+            _cubeData = new CubeColorData(matrix[0].Length, matrix.Length, matrix);
         }
 
         private void InitServices()
@@ -74,7 +73,8 @@ namespace Game.Scripts.CubeMechanics.Controllers
 
         private void InitColorMatrix()
         {
-            _currentMatrix = _matrixCreater.CreateMatrixFromRandom(MatrixSize, MatrixSize);
+            _currentMatrix = _matrixCreater.CreateMatrixFromRandom(_gameCubeSettingsData.MatrixSize,
+                _gameCubeSettingsData.MatrixSize);
             _colorMatrix.OnNext(_currentMatrix);
         }
 
